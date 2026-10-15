@@ -1,28 +1,40 @@
 
-FROM node:22.19-bookworm-slim
+FROM node:22.19.0-trixie
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    musl-tools \
-    git \
     python3 \
-    pkg-config \
+    git \
     ca-certificates \
+    curl \
+    wget \
+    chromium \
+    libnss3 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libgbm1 \
+    libasound2 \
+    libpangocairo-1.0-0 \
+    libxss1 \
+    libgtk-3-0 \
+    libxshmfence1 \
+    libglu1-mesa \
     && rm -rf /var/lib/apt/lists/*
-
-RUN corepack enable \
-    && corepack prepare pnpm@11.7.0 --activate
 
 WORKDIR /app
 
-COPY . .
+RUN corepack enable && corepack prepare pnpm@11.7.0 --activate
 
-ARG DSH_CLIENT_COMMIT_HASH
-ENV DSH_CLIENT_COMMIT_HASH=${DSH_CLIENT_COMMIT_HASH}
+COPY . .
 
 RUN pnpm install --frozen-lockfile
 RUN pnpm run build
 
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=3080
+
 EXPOSE 3080
 
-CMD ["pnpm", "dsh", "web", "--no-open"]
+CMD ["node", "--expose-internals", "--import", "tsx/esm", "apps/cli/src/bin.ts", "web", "--host", "0.0.0.0", "--port", "3080"]
