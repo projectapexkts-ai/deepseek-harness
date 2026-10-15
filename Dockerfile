@@ -37,4 +37,5 @@ ENV PORT=3080
 
 EXPOSE 3080
 
-CMD ["node", "--expose-internals", "--import", "tsx/esm", "apps/cli/src/bin.ts", "web", "--host", "127.0.0.1", "--port", "3080"]
+
+CMD ["sh", "-c", "CONTAINER_IP=$(hostname -i | awk '{print $1}'); echo \"Binding DeepSeek Harness to $CONTAINER_IP\"; exec node --expose-internals --import tsx/esm apps/cli/src/bin.ts web --host \"$CONTAINER_IP\" --port 3080 --trusted-host 192.168.0.70:8007"]
