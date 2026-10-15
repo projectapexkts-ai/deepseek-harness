@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-RUN corepack enable && corepack prepare pnpm@11.7.0 --activate
+RUN npm install --global pnpm@11.7.0
 
 COPY . .
 
