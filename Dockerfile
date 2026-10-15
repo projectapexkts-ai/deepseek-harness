@@ -37,4 +37,4 @@ ENV PORT=3080
 
 EXPOSE 3080
 
-CMD ["node", "--expose-internals", "--import", "tsx/esm", "apps/cli/src/bin.ts", "web", "--host", "0.0.0.0", "--port", "3080"]
+CMD ["node", "--expose-internals", "--import", "tsx/esm", "apps/cli/src/bin.ts", "web", "--host", "127.0.0.1", "--port", "3080"]
